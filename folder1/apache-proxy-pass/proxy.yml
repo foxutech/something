@@ -1,0 +1,5 @@
+- name: Configure http proxypass 
+  hosts: apache-host
+  connection: local
+  roles:
+  - apache-proxy-pass

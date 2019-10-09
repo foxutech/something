@@ -1,0 +1,2 @@
+- name: httpd restart
+  service: name=httpd state=restarted
