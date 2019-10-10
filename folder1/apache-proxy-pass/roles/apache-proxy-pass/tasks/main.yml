@@ -1,0 +1,28 @@
+- name: configure proxypass
+   blockinfile:
+     path: /etc/httpd/conf/httpd.conf
+     insertafter: EOF
+     marker: " {mark} ANSIBLE MANAGED BLOCK - ROLE apache-proxypass"
+     block: |5
+            ADD YOU CONTENT FROM HERE
+            should be aligned like this
+            "{{ URL1 }}"
+            "{{ URL2 }}"
+   validate: 'apachectl -t -f %s'
+   register: apache_result
+   when: proxy_updated
+   ignore_errors: yes
+   sudo: true
+   tags:
+    - apache
+
+- name: Apache | enable host
+  when:  apache_result|success
+  sudo: true
+  notify:
+    - restart httpd
+
+- name: Apache | enable host success
+  fail: msg="Apache configuration is invalid. Please check before re-running the playbook."
+  when: apache_result|failed
+  tags: [apache]

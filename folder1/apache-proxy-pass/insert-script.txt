@@ -1,0 +1,2 @@
+#create http-proxy.txt file and add your lines. then run following command. make sure mentioning corrent path
+echo "`cat http-proxy.txt`" >> /etc/httpd/conf/httpd.conf

@@ -1,8 +1,11 @@
 ---
-- name: Configure http proxypass 
+- name: Configure http proxypass
   hosts: apache-host
   become: yes
   connection: local
+  set_fact:
+    URL1: abc.com
+    URL2: xyz.com
   tasks:
     - name: configure proxypass
       blockinfile:
@@ -12,11 +15,13 @@
         block: |5
                ADD YOU CONTENT FROM HERE
                should be aligned like this
+               {{ URL1 }}
+               {{ URL2 }}
       validate: 'apachectl -t -f %s'
       register: apache_result
       when: proxy_updated
       ignore_errors: yes
-      tags: 
+      tags:
        - apache
 
     - name: Apache | enable host
@@ -29,7 +34,7 @@
       fail: msg="Apache configuration is invalid. Please check before re-running the playbook."
       when: apache_result|failed
       tags: [apache]
-  
+
   handlers:
     - name: httpd restart
       service: name=httpd state=restarted
